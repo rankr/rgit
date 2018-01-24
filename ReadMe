@@ -1,0 +1,12 @@
+ReadMe
+
+rgit: git for researchers
+
+target:
+	storing large amount of repositories with fewer storage
+	providing statistics data with command line and argus
+
+needed:
+	git, dulwich
+
+function for now:
