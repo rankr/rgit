@@ -1,12 +1,13 @@
 #coding: utf-8
+import os
 import argparse
 import sys
 from rgitmod import init
-from rgitmod.index import
+from rgitmod import absorb
 
 def initParse():
-	parser = argparse.ArgumentParser()
 
+	parser = argparse.ArgumentParser()
 	#initializing a empty file with rgit format, exec in the empty file
 	parser.add_argument('-i', '--init')
 
@@ -22,15 +23,14 @@ def initParse():
 if __name__ == '__main__':
 	#parsing the argus
 	parser = initParse()
-	args = getArgs()
-	args = vars(parser.parse_args(args))
+	args = vars(parser.parse_args())
 
-	if 'init' in args:
-		init.initFile(args['init'])
+	if args['init']:
+		init.initRepo(os.path.abspath(args['init']))
 		exit()
-	if 'absorb' in args:
-		pass
+	if args['absorb']:
+		absorb.absorb(os.path.abspath(args['absorb']))
 		exit()
-	if 'update' in args:
+	if args['update']:
 		pass
 		exit()

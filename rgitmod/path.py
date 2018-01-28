@@ -4,17 +4,19 @@ import platform
 import ctypes
 import sys
 
+from ObjRepo import *
+
 def getFreeSpaceMb(folder):
     """ 
-    Return folder/drive free space (in KB)
+    Return folder/drive free space (in Byte)
     """
     if platform.system() == 'Windows':
         free_bytes = ctypes.c_ulonglong(0)
         ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(folder), None, None, ctypes.pointer(free_bytes))
-        return free_bytes.value/1024
+        return free_bytes.value
     else:
         st = os.statvfs(folder)
-        return st.f_bavail * st.f_frsize/1024
+        return st.f_bavail * st.f_frsize
 
 def readPathFile():
 	'''
@@ -22,7 +24,7 @@ def readPathFile():
 	there's a list
 	'''
 	ret = []
-	pathFile = open('../../conf/path.txt')
+	pathFile = open('./rgitmod/index/repoPath')
 	while 1:
 		line = pathFile.readline()
 		if not line:
@@ -32,7 +34,7 @@ def readPathFile():
 
 def getObjPath(size):
 	'''
-	argu: space needed (in KB)
+	argu: space needed (in Byte)
 	detect which path to store
 	'''
 	pathList = readPathFile()

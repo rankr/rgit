@@ -30,3 +30,12 @@ def addRepoPath(name, path):
 	indexFile = open('repoPath', 'a')
 	indexFile.write(name + ',' + 'path' + '\n')
 	indexFile.close()
+	return 1
+
+def initObjIndex(filePath):
+	'''
+	create related dir and files in repo, to store which objs the repo has
+	'''
+	os.mkdir(filePath + '/.rgit')
+	f = open(filePath + '/.rgit/objects', 'w')
+	f.close()

@@ -3,7 +3,7 @@ import os
 import commands
 from index import index
 
-def initFile(filePath):
+def initRepo(filePath):
 	'''
 	initialize a file into rgit format
 	'''
@@ -22,4 +22,7 @@ def initFile(filePath):
 		print 'failed when \'git init\''
 		exit()
 	os.chdir(rawPath)
-	index.addRepoPath()
+
+	arr = filePath.split('/|\\')
+	index.addRepoPath(arr[-1], '/'.join(arr[0:-1]))
+	index.initObjIndex(filePath)
