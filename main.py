@@ -4,6 +4,7 @@ import argparse
 import sys
 from rgitmod import init
 from rgitmod import absorb
+from test import getidx
 
 def initParse():
 
@@ -17,6 +18,9 @@ def initParse():
 	#update a repository with a git repository, argu is the path
 	parser.add_argument('-u', '--update')
 
+	#for developer's testing
+	parser.add_argument('-t', '--test')
+
 	return parser
 
 
@@ -25,6 +29,10 @@ if __name__ == '__main__':
 	parser = initParse()
 	args = vars(parser.parse_args())
 
+	if args['test']:
+		if args['test'] == 'getidx':
+			getidx.testgetidx()
+		exit()
 	if args['init']:
 		init.initRepo(os.path.abspath(args['init']))
 		exit()

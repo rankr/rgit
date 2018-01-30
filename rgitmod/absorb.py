@@ -7,53 +7,22 @@ from ObjRepo import *
 import commands as cmd
 from RgitRepo import *
 
-
-def num2Chr(a):
-	if a < 10:
-		return chr(ord('0') + a)
-	else:
-		return chr(ord('a') + a - 10)
-
-def idxAna(idxPath):#get obj from index file
-	#checking file
-	f = open(idxPath, 'rb')
-	assert(f)
-
-	#checking .idx
-	size = 4 + 4
-	header = [255, 116, 79, 99, 0, 0, 0, 2]
-	L = []
-	for i in xrange(0, size):
-		temp = f.read(1)
-		L.append(ord(temp))
-	assert(L == header)
-
-	L = []
-	for i in xrange(0, 256):
-		a = ord(f.read(1))
-		b = ord(f.read(1))
-		c = ord(f.read(1))
-		d = ord(f.read(1))
-		temp = a*256**3 + b*256**2 + c*256 + d#tested, this's right
-		L.append(temp)
-	objNum = L[255]
-	ret = []
-	for i in xrange(0, objNum):
-		s = ''
-		for j in xrange(0, 20):
-			temp = ord(f.read(1))
-			a = temp/16
-			b = temp%16
-			s += num2Chr(a) + num2Chr(b)
-		ret.append(s)
+def idxAna(idxPath):
+	'''get a path of *.idx file, give all its objects'''
+	status, output = cmd.getstatusoutput('cat %s | git show-index'%(idxPath))
+	if status != 0:
+		print 'git show-index failed in idxAna'
+		exit()
+	ret = output.split()[1::3]
 	return ret
 
 def getObjFromGit(repoPath):
-	'''get all object names from git repo'''
+	'''get all objects names from git repo'''
+	rawPath = os.getcwd()
+	os.chdir(repoPath)
+
 	path = repoPath + '/.git/objects'
-
 	dirs = os.listdir(path)
-
 	ret = []
 	for i in dirs:
 		if i == 'info':
@@ -62,10 +31,12 @@ def getObjFromGit(repoPath):
 			d = os.listdir(path + '/' + i)
 			for j in d:
 				if len(j) > 4 and j[-4:]=='.idx':
-					ret += idxAna(path + '/pack/' + j)
+					ret += idxAna2(path + '/pack/' + j)
 		else:
 			objs = os.listdir(path + '/' + i)
 			ret += [i + x for x in objs]
+
+	os.chdir(rawPath)
 	return ret
 
 
@@ -96,3 +67,4 @@ def absorb(gitRepoPath):
 		objrepo.addObjFromContent(objRawContent, sha, objType)
 		rgitRepo.storeObjName(sha)
 	rgitRepo.delGitFile()
+	os.chdir(rawPath)
