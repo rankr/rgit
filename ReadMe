@@ -1,12 +1,37 @@
 ReadMe
 
-rgit: git for researchers
+rgit: a choose to store repositories based on git to take fewer storage 
+and to do statistics more easily
 
-target:
+To use this, you need to change path in rgit/rgitmod/index/repoPath into 
+your path to store rgit infos
+
+1.target:
 	storing large amount of repositories with fewer storage
-	providing statistics data with command line and argus
+	providing interfaces to access statistics of OSS data more easily
 
-needed:
-	git, dulwich
+2.needed:
+	python, git
 
-function for now:
+3.rgit format
+
+(1)based on the format of git-repository
+
+(2)transfer objects to specific position to manage objects from different
+	objects together
+
+(3)new directory .rgit, and some files in it to store related info
+
+4.function for now:
+
+(1)cmd: python main.py --init path/to/new_repo
+intro: init directory path/to/new_repo into rgit format, and rgit will 
+store related info in some files
+
+(2)cmd: python main.py --absorb path/to/git_repo
+intro: change git repository path/to/git_repo into rgit format, and 
+absorb the git objects into specific directories
+
+(3)cmd: python main.py --recover path/to/recover_git_repo
+intro: recover a rgit repository into git repository
+now, it can just recover the directory which used to be a git repository

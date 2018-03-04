@@ -4,6 +4,7 @@ import platform
 import ctypes
 import sys
 
+#I'm not sure if it appropriate to import this
 from ObjRepo import *
 
 def getFreeSpaceMb(folder):
@@ -52,4 +53,17 @@ def getObjPath(size):
  	print 'no space left'
  	exit()
  	return ''
+
+def shaFilePath(sha):
+	'''
+	find a obj's store path if exists
+	'''
+
+	pathList = readPathFile()
+	for path in pathList:
+		repo = ObjRepo(path)
+		r = repo.objPathBySha(sha)
+		if r:
+			return r
+	return ''
 

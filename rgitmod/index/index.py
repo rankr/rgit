@@ -1,6 +1,11 @@
 #coding: utf-8
+import sys
+import os
+from rgitmod import path
+sys.path.append('../')
+sys.path.append('../../conf')
 
-def findRepo(name, path):
+def findRepo(name, repopath):
 	'''
 	whether the repo have been managed by rgit
 	ret 1 - existed
@@ -9,13 +14,19 @@ def findRepo(name, path):
 	'''
 	more powerful techniques should be used to improve the efficiency
 	'''
-	repoPathFile = open('repoPath', 'r')
+	pathList = path.readPathFile()
+
+	repoPathFile = open('./rgitmod/index/repoList', 'r')
 	while True:
 		line = repoPathFile.readline()
 		if not line:
 			return 0
-		storeName, storePath = line.strip().split(',')
-		if name == storeName and path == storePath:
+		storeName, storePath= line.strip().split(',')
+		print "name:", name
+		print "storename:", storeName
+		print "repoPath:", repopath
+		print "storePath:", storePath
+		if name == storeName and repopath == storePath:
 			return 1
 
 
@@ -27,7 +38,7 @@ def addRepoPath(name, path):
 	'''
 	if findRepo(name, path):
 		return 0
-	indexFile = open('repoPath', 'a')
+	indexFile = open('repoList', 'a')
 	indexFile.write(name + ',' + 'path' + '\n')
 	indexFile.close()
 	return 1
@@ -39,3 +50,6 @@ def initObjIndex(filePath):
 	os.mkdir(filePath + '/.rgit')
 	f = open(filePath + '/.rgit/objects', 'w')
 	f.close()
+
+def findObjInObjRepo(objRepoPath, sha):
+	pass
