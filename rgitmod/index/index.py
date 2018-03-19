@@ -1,8 +1,8 @@
 #coding: utf-8
 import sys
 import os
-from rgitmod import path
 sys.path.append('../')
+from rgitmod import rpath
 sys.path.append('../../conf')
 
 def findRepo(name, repopath):
@@ -14,7 +14,7 @@ def findRepo(name, repopath):
 	'''
 	more powerful techniques should be used to improve the efficiency
 	'''
-	pathList = path.readPathFile()
+	pathList = rpath.readPathFile()
 
 	repoPathFile = open('./rgitmod/index/repoList', 'r')
 	while True:
@@ -22,10 +22,6 @@ def findRepo(name, repopath):
 		if not line:
 			return 0
 		storeName, storePath= line.strip().split(',')
-		print "name:", name
-		print "storename:", storeName
-		print "repoPath:", repopath
-		print "storePath:", storePath
 		if name == storeName and repopath == storePath:
 			return 1
 

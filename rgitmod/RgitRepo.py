@@ -12,7 +12,7 @@ import os
 import commands as cmd
 import shutil
 from func import cmpSha
-import path
+import rpath
 
 
 '''
@@ -54,7 +54,7 @@ class RgitRepo:
 
 		finalPath = "%s/%s/%s"%(self.path, dirname, filename)
 		f = open(finalPath, 'r')
-		shaArr = [x.stripe() for x in f.readlines()]
+		shaArr = [x.strip() for x in f.readlines()]
 		f.close()
 
 		if sha in shaArr:
@@ -88,14 +88,12 @@ class RgitRepo:
 			for j in xrange(255, -1, -1):
 				filename = hex(j/16)[2] + hex(j%16)[2]
 				prefix = dirname + filename
-				print 'prefix is',prefix
 				if not ShaArr:
 					return 1
 
 				if ShaArr[-1][0:4] != prefix:
 					continue
 				nowPath = "%s/%s/%s"%(self.path, dirname, filename)
-				print 'nowPath is', nowPath
 				f = open(nowPath)
 				fileCont = [x.strip() for x in f.readlines()]
 				f.close()
@@ -145,7 +143,7 @@ class RgitRepo:
 			self.insertObj(i)
 
 	def insertObj(self, sha):
-		p = path.shaFilePath(sha)
+		p = rpath.shaFilePath(sha)
 		if not p:
 			print "repo wrecked, obj %s is disappeared"%(sha)
 			raise ValueError

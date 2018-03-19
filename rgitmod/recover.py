@@ -12,7 +12,7 @@ def recovergit(RepoPath):
 	RepoPath = os.path.abspath(RepoPath)
 	print "RepoPath", RepoPath
 	a = re.split(r"/|\\", RepoPath)
-	print 'a is',a
+	
 	if not index.findRepo(a[-1], '/'.join(a[0:-1])):
 		print "not support recover to any directory now"
 		return False

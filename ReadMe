@@ -30,8 +30,19 @@ store related info in some files
 
 (2)cmd: python main.py --absorb path/to/git_repo
 intro: change git repository path/to/git_repo into rgit format, and 
-absorb the git objects into specific directories
+transfer the git objects into specific directories(in rgit/rgitmod/index/repoList)
 
 (3)cmd: python main.py --recover path/to/recover_git_repo
 intro: recover a rgit repository into git repository
-now, it can just recover the directory which used to be a git repository
+but now, it can just recover the directory which used to be a git repository
+
+todo:
+ (1)Increase the efficiency of absorb. Now, it takes more than 10 minutes to 
+ absorb an 82.3MB repository(redis).
+ 
+ (2)Complete the function recover. Now, it can just recover git repository into 
+ directory which used to be a git repository.
+ 
+ (3)Support commit on rgit repository.
+ 
+ (4)Support update rgit reposiroty with new-version git reposiroty

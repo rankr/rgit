@@ -39,14 +39,18 @@ def cmpSha(sha1, sha2):
 	return 0
 
 
-def idxAna(idxPath):
+def idxAna(idxPath, detail = False):
 	'''get a path of *.idx file, give all its objects'''
-	status, output = cmd.getstatusoutput('cat %s | git show-index'%(idxPath))
-	if status != 0:
-		print 'git show-index failed in idxAna'
-		exit()
-	ret = output.split()[1::3]
-	return ret
+	if not detail:
+		status, output = cmd.getstatusoutput('cat %s | git show-index'%(idxPath))
+		if status != 0:
+			print 'git show-index failed in idxAna'
+			exit()
+		ret = output.split()[1::3]
+		return ret
+	else:
+		#analyze the index file
+		pass
 
 def getObjFromGit(repoPath):
 	'''get all objects names from git repo'''
@@ -70,3 +74,37 @@ def getObjFromGit(repoPath):
 
 	os.chdir(rawPath)
 	return ret
+
+
+def read_number_from_file(file, bytes, bigendian = True):
+	a = 0
+	for i in xrange(0, bytes):
+		b = ord(file.read(1))
+		if bigendian:
+			a = a*256 + b
+		else:
+			a = a + b*(256**i)
+	return a
+	
+
+
+OBJTYPE = ["not exists", "commit", "tree", "blob", "tag", "not exists", \
+"ofs_delta", "ref_delta"]
+
+def read_chunk_from_pack(file, length = -1):
+	#if length == -1, read all remained data
+	#have checked to be corrected
+	header_len = 0 #bytes of a header of a chunk takes
+	obj_type = 0
+	while 1:
+		header_len += 1
+		a = ord(file.read(1))
+		if header_len == 1:
+			obj_type = OBJTYPE[(a>>4)&7]
+		if not a&(0x80):
+			break
+	if length != -1:
+		compressed_data = file.read(length - header_len)
+	else:
+		compressed_data = file.read()
+	return obj_type, compressed_data, header_len
